@@ -9,7 +9,7 @@ write and execute this:
 
 DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users(
-	user_uuid VARCHAR(255) NOT NULL PRIMARY KEY UNIQUE,
+user_uuid VARCHAR(255) NOT NULL PRIMARY KEY UNIQUE,
 	first_name VARCHAR(255) NOT NULL, 
 	last_name VARCHAR(255) NOT NULL,
 	is_admin BOOLEAN NOT NULL,
@@ -44,5 +44,9 @@ CREATE TABLE meetingcomments(
 	user_uuid VARCHAR(255) NOT NULL REFERENCES users(user_uuid),
 	meeting_uuid VARCHAR(255) NOT NULL REFERENCES meetings(meeting_uuid)
 );
+
+INSERT INTO users(user_uuid,first_name,last_name,is_admin,email,pwd) VALUES('1admin1','Admin','Admin',True,'ad@abv.bg','$2a$10$9NJul0512jUPAG1afkwfw.VHFDKHEBZuIbf8.noen0BACrWcv03u6');
+
+
 
 go in application.properties in the project and setup the correct values for your database
