@@ -3,7 +3,7 @@ Project setup:
 	import maven project in intelij/eclipse
 	install https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 		*im using 13.1
-	go in pgAdmin4 create database lunchapp
+	go in pgAdmin4 create database meetingapp
 	rightclick the database and open QueryTool
 write and execute this:
 
