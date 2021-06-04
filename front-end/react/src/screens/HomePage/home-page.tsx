@@ -182,7 +182,7 @@ export const HomePage = () => {
         fetchMeetings(sessionToken);
       } else {
         setMessage(undefined);
-        setError("Failed to join meeting.");
+        setError("Failed to join hangout.");
       }
       setOpenSnackbar(true);
     }
@@ -247,7 +247,7 @@ export const HomePage = () => {
                     </Grid>
                     <Grid item xs={12} className={classes.gridItem}>
                       <Typography variant="body1" className={classes.content}>
-                        Create your own meeting.
+                        Create your own hangout.
                       </Typography>
                     </Grid>
 
@@ -278,7 +278,7 @@ export const HomePage = () => {
 
                             fetchMeetings(sessionToken);
                           } catch (error) {
-                            setError("Failed to create meeting.");
+                            setError("Failed to create hangout.");
                             setOpenSnackbar(true);
                           }
                         }
@@ -364,8 +364,8 @@ export const HomePage = () => {
                                   disabled={isSubmitting}
                                 >
                                   {isSubmitting
-                                    ? "Creating meeting..."
-                                    : "Create meeting"}
+                                    ? "Creating hangout..."
+                                    : "Create hangout"}
                                 </Button>
                               </Grid>
                             </Grid>
@@ -408,7 +408,7 @@ export const HomePage = () => {
                         size="large"
                         onClick={handleJoinMeeting}
                       >
-                        Join meeting
+                        Join hangout
                       </Button>
                     </Grid>
                   </Grid>

@@ -43,7 +43,7 @@ const cardTilt: number = 3;
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     card: {
-      boxShadow: "0 8px 20px -8px rgba(0, 0, 0, 0.25)",
+      boxShadow: "0 8px 20px -8px rgba(0, 0, 0, 0.5)",
       overflowWrap: "break-word",
       borderRadius: "1rem",
 
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     cardWrapperShadow: {
-      background: theme.palette.grey[200],
+      background: theme.palette.primary.light,
       padding: "0.5rem 0",
       marginBottom: "4rem",
       borderRadius: "2rem",
@@ -76,13 +76,16 @@ const useStyles = makeStyles((theme: Theme) =>
     cardWrapper: {
       background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
       padding: "4rem 6rem",
+      [theme.breakpoints.down("sm")]: {
+        padding: "1rem 1.5rem",
+      },
       borderRadius: "2rem",
     },
     header: {
       display: "flex",
       alignItems: "center",
       background: theme.palette.background.paper,
-      borderBottom: `1px solid ${theme.palette.grey[300]}`,
+      borderBottom: `1px solid ${theme.palette.divider}`,
     },
     description: {
       fontSize: "20px",
@@ -98,6 +101,7 @@ const useStyles = makeStyles((theme: Theme) =>
     divider: {
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(2),
+      // background: "transparent",
     },
     icon: {
       color: theme.palette.text.secondary,
@@ -110,18 +114,19 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.text.secondary,
     },
     information: {
-      fontSize: "16px",
       fontWeight: 400,
+      fontSize: "16px",
+      textAlign: "center",
       color: theme.palette.text.primary,
     },
     avatar: {
-      color: theme.palette.error.contrastText,
+      color: theme.palette.common.white,
       backgroundColor: theme.palette.primary.main,
     },
     title: {
-      fontSize: "20px",
       fontWeight: 500,
-      color: theme.palette.primary.contrastText,
+      fontSize: "20px",
+      color: theme.palette.text.primary,
     },
     subheader: {
       fontWeight: 400,
@@ -278,7 +283,7 @@ export const MeetingCard = ({
                         <FileCopyOutlinedIcon />
                       </IconButton>
                     </Tooltip>
-                    <Tooltip arrow title="Delete meeting">
+                    <Tooltip arrow title="Delete hangout">
                       <IconButton
                         aria-label="delete"
                         className={classes.deleteIcon}
@@ -327,7 +332,7 @@ export const MeetingCard = ({
                         meetingOwner.id === currentUser.id
                           ? "delete"
                           : "leave"
-                      } this meeting?`}
+                      } this hangout?`}
                     </Typography>
 
                     <Grid container spacing={4} style={{ marginTop: "1rem" }}>
