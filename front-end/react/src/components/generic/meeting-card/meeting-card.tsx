@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   Avatar,
   Backdrop,
@@ -7,7 +7,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CircularProgress,
   Collapse,
   createStyles,
   Divider,
@@ -17,6 +16,7 @@ import {
   makeStyles,
   Modal,
   ownerDocument,
+  TextField,
   Theme,
   Tooltip,
   Typography,
@@ -28,6 +28,7 @@ import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import SendIcon from "@material-ui/icons/Send";
 import * as api from "../../../api";
 import { IUser } from "../../../api";
 import { useAuth } from "../../../hooks/useAuth";
@@ -99,9 +100,9 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(1),
     },
     divider: {
-      marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-      // background: "transparent",
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+      background: "transparent",
     },
     icon: {
       color: theme.palette.text.secondary,
@@ -183,6 +184,25 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 500,
       color: theme.palette.text.primary,
     },
+    commentsContainer: {
+      width: "100%",
+      height: "100%",
+      padding: "0 0 0 1rem",
+      borderRadius: "0.5rem",
+      background: theme.palette.primary.light,
+      boxShadow: "0 8px 18px -10px rgba(0, 0, 0, 0.2)",
+    },
+    commentInput: {
+      padding: "0 !important",
+    },
+    comments: {
+      fontWeight: 400,
+      fontSize: "16px",
+      color: theme.palette.text.primary,
+    },
+    submitComment: {
+      color: theme.palette.primary.main,
+    },
   })
 );
 
@@ -199,6 +219,7 @@ export const MeetingCard = ({
   const [meetingOwner, setMeetingOwner] = useState<IUser>();
   const [meetingUsers, setMeetingUsers] = useState<IUser[]>([]);
   const [sessionToken, setSessionToken] = useState<string | null>(null);
+  const [comment, setComment] = useState<string>("");
 
   const fetchMeetingUsers = async () => {
     const owner = await api.getMeetingOwner(meeting.id);
@@ -254,6 +275,12 @@ export const MeetingCard = ({
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const handleChangeComment = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setComment(event.currentTarget.value);
   };
 
   return (
@@ -417,41 +444,77 @@ export const MeetingCard = ({
                     <ExpandMoreIcon />
                   </IconButton>
                 </Box>
-              </CardContent>
 
-              <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent>
-                  <Grid
-                    container
-                    spacing={2}
-                    className={classes.usersContainer}
-                  >
-                    {meetingUsers.map((user: IUser, index) => (
-                      <Grid
-                        item
-                        xs={3}
-                        key={index}
-                        className={classes.userContainer}
-                      >
-                        <Avatar
-                          aria-label="recipe"
-                          variant="rounded"
-                          className={classes.avatar}
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                  <CardContent>
+                    <Grid
+                      container
+                      spacing={2}
+                      className={classes.usersContainer}
+                    >
+                      {meetingUsers.map((user: IUser, index) => (
+                        <Grid
+                          item
+                          xs={3}
+                          key={index}
+                          className={classes.userContainer}
                         >
-                          {user.firstName.charAt(0)}
-                        </Avatar>
-                        <Typography
-                          style={{ marginTop: "0.5rem" }}
-                          className={classes.information}
-                          variant="body1"
-                        >
-                          {user.firstName} {user.lastName}
-                        </Typography>
-                      </Grid>
-                    ))}
-                  </Grid>
-                </CardContent>
-              </Collapse>
+                          <Avatar
+                            aria-label="recipe"
+                            variant="rounded"
+                            className={classes.avatar}
+                          >
+                            {user.firstName.charAt(0)}
+                          </Avatar>
+                          <Typography
+                            style={{ marginTop: "0.5rem" }}
+                            className={classes.information}
+                            variant="body1"
+                          >
+                            {user.firstName} {user.lastName}
+                          </Typography>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </CardContent>
+                </Collapse>
+
+                <Divider className={classes.divider} />
+
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  <Box className={classes.commentsContainer}>
+                    {/* <Typography variant="body2" className={classes.comments}>
+                      {"There are no comments available."}
+                    </Typography> */}
+                    <TextField
+                      multiline
+                      placeholder="Comment something nice :)"
+                      size="small"
+                      autoComplete="off"
+                      variant="standard"
+                      fullWidth
+                      name="comment"
+                      type="string"
+                      id="comment"
+                      value={comment}
+                      onChange={(event) => handleChangeComment(event)}
+                      InputProps={{
+                        disableUnderline: true,
+                        className: classes.commentInput,
+                        endAdornment: (
+                          <IconButton
+                            aria-label="copy"
+                            className={classes.submitComment}
+                            onClick={handleLeaveMeeting}
+                          >
+                            <SendIcon />
+                          </IconButton>
+                        ),
+                      }}
+                    />
+                  </Box>
+                </Box>
+              </CardContent>
             </Card>
           </Box>
         </Box>
