@@ -1,41 +1,50 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './app/App';
-import reportWebVitals from './reportWebVitals';
-import 'fontsource-roboto/latin.css';
-import './setup/axios';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./app/App";
+import reportWebVitals from "./reportWebVitals";
+import "fontsource-roboto/latin.css";
+import "./setup/axios";
 import {
   createMuiTheme,
   CssBaseline,
   MuiThemeProvider,
-} from '@material-ui/core';
-import { deepPurple, teal } from '@material-ui/core/colors';
-import { getDarkModePreference } from './session';
+} from "@material-ui/core";
+import { grey } from "@material-ui/core/colors";
+import { getDarkModePreference } from "./session";
 
 const lightTheme = createMuiTheme({
   palette: {
-    type: 'light',
+    type: "light",
     background: {
-      default: '#eeeeee',
+      default: "#ffffff",
+      paper: grey[200],
     },
     primary: {
-      main: deepPurple[500],
+      main: "#FE6B8B",
+      light: "#ffffff",
+      dark: grey[200],
     },
     secondary: {
-      main: teal[200],
+      main: "#FF8E53",
     },
   },
 });
 
 const darkTheme = createMuiTheme({
   palette: {
-    type: 'dark',
+    type: "dark",
+    background: {
+      default: "#2F4858",
+      paper: "#3F5679",
+    },
     primary: {
-      main: deepPurple[400],
+      main: "#FE6B8B",
+      light: "#3F5679",
+      dark: "#2F4858",
     },
     secondary: {
-      main: teal[200],
+      main: "#FF8E53",
     },
   },
 });
@@ -49,7 +58,7 @@ ReactDOM.render(
       <App />
     </MuiThemeProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 reportWebVitals();

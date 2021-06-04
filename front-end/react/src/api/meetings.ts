@@ -1,6 +1,11 @@
-import axios from 'axios';
-import { IApiResponse } from '.';
-import { IUser } from './users';
+import axios from "axios";
+import { IApiResponse } from ".";
+import { IUser } from "./users";
+
+export interface IComment {
+  content: string;
+  user: IUser;
+}
 
 export interface IMeeting {
   id: string;
@@ -9,6 +14,7 @@ export interface IMeeting {
   location: string;
   date: string;
   time: string;
+  comments: IComment[];
 }
 
 export interface IMeetingData {
@@ -30,7 +36,7 @@ export interface IMeetingInviteTokenResponse {
 export const createMeeting = async (
   data: IMeetingData
 ): Promise<IMeetingResponse> => {
-  const response = await axios.post('/meeting/create', data);
+  const response = await axios.post("/meeting/create", data);
 
   return response.data;
 };
