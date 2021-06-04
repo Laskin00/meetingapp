@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { getSessionCookie } from '../session';
+import axios from "axios";
+import { getSessionCookie } from "../session";
 
 export interface IUser {
   id: string;
@@ -37,13 +37,13 @@ export interface SuccessResponse {
 const userUuid = getSessionCookie();
 
 export const signIn = async (data: ISignInData): Promise<IUser> => {
-  const response = await axios.post('/user/login', data);
+  const response = await axios.post("/user/login", data);
 
   return response.data;
 };
 
 export const signUp = async (data: ISignUpData): Promise<IApiResponse> => {
-  const response = await axios.post('/user/register', data);
+  const response = await axios.post("/user/register", data);
 
   return response.data;
 };
@@ -51,7 +51,7 @@ export const signUp = async (data: ISignUpData): Promise<IApiResponse> => {
 export const signOut = async (
   sessionToken: ISignOutData
 ): Promise<SuccessResponse> => {
-  const response = await axios.post('/user/logout', sessionToken);
+  const response = await axios.post("/user/logout", sessionToken);
 
   return response.data;
 };
