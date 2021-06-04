@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.text.primary,
     },
     iconBtn: {
-      marginTop: theme.spacing(2),
+      margin: theme.spacing(2),
       fontSize: "48px",
       color: theme.palette.primary.main,
     },
@@ -188,6 +188,11 @@ export const HomePage = () => {
     }
   };
 
+  const handleTriggerSnackbar = (message: string, error?: boolean) => {
+    error ? setError(message) : setMessage(message);
+    setOpenSnackbar(true);
+  };
+
   return (
     <>
       {isLoading ? (
@@ -202,7 +207,7 @@ export const HomePage = () => {
           justifyContent="center"
         >
           <Typography variant="h3" className={classes.heading}>
-            Your meetings
+            Your hangouts
           </Typography>
 
           <IconButton
@@ -228,7 +233,7 @@ export const HomePage = () => {
             <Fade in={open}>
               <div className={classes.wrapper}>
                 <Typography variant="h4" className={classes.title}>
-                  Lets meet up.
+                  Lets hang out!
                 </Typography>
 
                 <Box
@@ -267,7 +272,7 @@ export const HomePage = () => {
                               );
 
                             setMessage(
-                              `Success! Meeting invite code is: ${inviteTokenResponse.inviteToken}`
+                              `Success! Hangout invite code is: ${inviteTokenResponse.inviteToken}`
                             );
                             setOpenSnackbar(true);
 
@@ -292,7 +297,7 @@ export const HomePage = () => {
                                   variant="outlined"
                                   fullWidth
                                   name="description"
-                                  label="Meeting Description"
+                                  label="Hangout Description"
                                   type="string"
                                   id="description"
                                   onChange={handleChange}
@@ -305,7 +310,7 @@ export const HomePage = () => {
                                   variant="outlined"
                                   fullWidth
                                   name="location"
-                                  label="Meeting Location"
+                                  label="Hangout Location"
                                   type="string"
                                   id="location"
                                   onChange={handleChange}
@@ -323,7 +328,7 @@ export const HomePage = () => {
                                   variant="outlined"
                                   fullWidth
                                   name="date"
-                                  label="Meeting Date (YYYY-MM-DD)"
+                                  label="Hangout Date (YYYY-MM-DD)"
                                   type="string"
                                   id="date"
                                   onChange={handleChange}
@@ -341,7 +346,7 @@ export const HomePage = () => {
                                   variant="outlined"
                                   fullWidth
                                   name="time"
-                                  label="Meeting Time (HH:MM:SS)"
+                                  label="Hangout Time (HH:MM:SS)"
                                   type="string"
                                   id="time"
                                   onChange={handleChange}
@@ -364,21 +369,6 @@ export const HomePage = () => {
                                 </Button>
                               </Grid>
                             </Grid>
-
-                            <Grid item xs={12} className={classes.gridItem}>
-                              <Snackbar
-                                open={openSnackbar}
-                                onClose={handleCloseSnackbar}
-                                TransitionComponent={SlideTransition}
-                              >
-                                <Alert
-                                  severity={message ? "success" : "error"}
-                                  onClose={handleClose}
-                                >
-                                  {message || error}
-                                </Alert>
-                              </Snackbar>
-                            </Grid>
                           </Form>
                         </Grid>
                       )}
@@ -391,7 +381,7 @@ export const HomePage = () => {
 
                     <Grid item xs={12} className={classes.gridItem}>
                       <Typography variant="body1" className={classes.content}>
-                        Join a meeting using a special invite code.
+                        Join a hangout using a special invite code.
                       </Typography>
                     </Grid>
 
@@ -401,7 +391,7 @@ export const HomePage = () => {
                         variant="outlined"
                         fullWidth
                         name="meetingCode"
-                        label="Meeting Code"
+                        label="Hangout Code"
                         type="string"
                         id="meetingCode"
                         value={meetingCode}
@@ -431,13 +421,28 @@ export const HomePage = () => {
             <Box>
               {meetings.map((meeting: IMeeting, index) => (
                 <MeetingCard
+                  key={index}
                   meeting={meeting}
                   handleRefetchMeetings={handleRefetchMeetings}
-                  key={index}
+                  triggerSnackbar={handleTriggerSnackbar}
                 />
               ))}
             </Box>
           )}
+
+          <Snackbar
+            open={openSnackbar}
+            onClose={handleCloseSnackbar}
+            TransitionComponent={SlideTransition}
+            autoHideDuration={3000}
+          >
+            <Alert
+              severity={message ? "success" : "error"}
+              onClose={handleClose}
+            >
+              {message || error}
+            </Alert>
+          </Snackbar>
         </Box>
       )}
     </>

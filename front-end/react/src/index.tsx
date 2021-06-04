@@ -31,11 +31,15 @@ const lightTheme = createMuiTheme({
 const darkTheme = createMuiTheme({
   palette: {
     type: "dark",
+    background: {
+      default: "#2F4858",
+      paper: "#2F4858",
+    },
     primary: {
       main: "#FE6B8B",
     },
     secondary: {
-      main: teal[200],
+      main: "#FF8E53",
     },
   },
 });

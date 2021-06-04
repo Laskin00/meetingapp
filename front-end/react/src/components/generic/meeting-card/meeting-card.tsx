@@ -18,6 +18,7 @@ import {
   Modal,
   ownerDocument,
   Theme,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
 import { IMeeting } from "../../../api/meetings";
@@ -25,6 +26,7 @@ import LocationOnIcon from "@material-ui/icons/LocationOn";
 import EventIcon from "@material-ui/icons/Event";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import * as api from "../../../api";
 import { IUser } from "../../../api";
@@ -32,8 +34,11 @@ import { useAuth } from "../../../hooks/useAuth";
 
 interface IMeetingCardProps {
   meeting: IMeeting;
+  triggerSnackbar: (message: string, error?: boolean) => void;
   handleRefetchMeetings: () => void;
 }
+
+const cardTilt: number = 3;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,17 +58,17 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: "2rem",
       "&:nth-child(odd)": {
         "& > div": {
-          transform: "rotate(-2deg)",
+          transform: `rotate(-${cardTilt}deg)`,
           "& > div": {
-            transform: "rotate(2deg)",
+            transform: `rotate(${cardTilt}deg)`,
           },
         },
       },
       "&:nth-child(even)": {
         "& > div": {
-          transform: "rotate(2deg)",
+          transform: `rotate(${cardTilt}deg)`,
           "& > div": {
-            transform: "rotate(-2deg)",
+            transform: `rotate(-${cardTilt}deg)`,
           },
         },
       },
@@ -82,6 +87,7 @@ const useStyles = makeStyles((theme: Theme) =>
     description: {
       fontSize: "20px",
       color: theme.palette.text.primary,
+      textAlign: "center",
     },
     dataRow: {
       display: "flex",
@@ -98,12 +104,15 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(1),
     },
     deleteIcon: {
-      color: theme.palette.error.main,
+      color: theme.palette.primary.main,
+    },
+    copyIcon: {
+      color: theme.palette.text.secondary,
     },
     information: {
       fontSize: "16px",
       fontWeight: 400,
-      color: theme.palette.text.secondary,
+      color: theme.palette.text.primary,
     },
     avatar: {
       color: theme.palette.error.contrastText,
@@ -174,6 +183,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const MeetingCard = ({
   meeting,
+  triggerSnackbar,
   handleRefetchMeetings,
 }: IMeetingCardProps) => {
   const classes = useStyles();
@@ -214,6 +224,11 @@ export const MeetingCard = ({
     setOpen(false);
   };
 
+  const handleCopyInvite = () => {
+    navigator.clipboard.writeText(meeting.inviteToken);
+    triggerSnackbar("Copied invite code to clipboard.");
+  };
+
   const handleLeaveMeeting = async () => {
     if (currentUser && sessionToken && meetingOwner) {
       try {
@@ -225,6 +240,7 @@ export const MeetingCard = ({
 
         handleClose();
         handleRefetchMeetings();
+        triggerSnackbar("Hangout left.", true);
       } catch (error) {
         console.log(error);
       }
@@ -252,13 +268,26 @@ export const MeetingCard = ({
                   </Avatar>
                 }
                 action={
-                  <IconButton
-                    aria-label="settings"
-                    className={classes.deleteIcon}
-                    onClick={handleOpen}
-                  >
-                    <DeleteForeverIcon />
-                  </IconButton>
+                  <>
+                    <Tooltip arrow title="Copy invite code">
+                      <IconButton
+                        aria-label="copy"
+                        className={classes.copyIcon}
+                        onClick={handleCopyInvite}
+                      >
+                        <FileCopyOutlinedIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip arrow title="Delete meeting">
+                      <IconButton
+                        aria-label="delete"
+                        className={classes.deleteIcon}
+                        onClick={handleOpen}
+                      >
+                        <DeleteForeverIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </>
                 }
                 title={
                   meetingOwner &&
@@ -370,7 +399,7 @@ export const MeetingCard = ({
 
                 <Box display="flex" justifyContent="center" alignItems="center">
                   <Typography className={classes.information} variant="body1">
-                    View meeting participants
+                    View hangout participants
                   </Typography>
                   <IconButton
                     className={`${classes.expand} ${
