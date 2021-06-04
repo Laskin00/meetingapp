@@ -10,19 +10,20 @@ import {
   CssBaseline,
   MuiThemeProvider,
 } from "@material-ui/core";
-import { deepPurple, teal, grey } from "@material-ui/core/colors";
+import { grey } from "@material-ui/core/colors";
 import { getDarkModePreference } from "./session";
 
 const lightTheme = createMuiTheme({
   palette: {
     type: "light",
     background: {
-      default: "#fffff",
-      paper: "#ffffff",
+      default: "#ffffff",
+      paper: grey[200],
     },
     primary: {
       main: "#FE6B8B",
-      light: grey[200],
+      light: "#ffffff",
+      dark: grey[200],
     },
     secondary: {
       main: "#FF8E53",
@@ -35,11 +36,12 @@ const darkTheme = createMuiTheme({
     type: "dark",
     background: {
       default: "#2F4858",
-      paper: "#2F4858",
+      paper: "#3F5679",
     },
     primary: {
       main: "#FE6B8B",
       light: "#3F5679",
+      dark: "#2F4858",
     },
     secondary: {
       main: "#FF8E53",

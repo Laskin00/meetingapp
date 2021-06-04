@@ -47,13 +47,14 @@ const useStyles = makeStyles((theme: Theme) =>
       boxShadow: "0 8px 20px -8px rgba(0, 0, 0, 0.5)",
       overflowWrap: "break-word",
       borderRadius: "1rem",
+      background: theme.palette.primary.dark,
 
       [theme.breakpoints.up("sm")]: {
         width: theme.breakpoints.width("sm"),
       },
     },
     cardWrapperShadow: {
-      background: theme.palette.primary.light,
+      background: theme.palette.background.paper,
       padding: "0.5rem 0",
       marginBottom: "4rem",
       borderRadius: "2rem",
@@ -85,7 +86,7 @@ const useStyles = makeStyles((theme: Theme) =>
     header: {
       display: "flex",
       alignItems: "center",
-      background: theme.palette.background.paper,
+      background: theme.palette.background.default,
       borderBottom: `1px solid ${theme.palette.divider}`,
     },
     description: {
