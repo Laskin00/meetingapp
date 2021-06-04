@@ -187,18 +187,42 @@ const useStyles = makeStyles((theme: Theme) =>
     commentsContainer: {
       width: "100%",
       height: "100%",
+      borderRadius: "0.5rem",
+      background: theme.palette.primary.light,
+      boxShadow: "0 8px 18px -10px rgba(0, 0, 0, 0.2)",
+      "&:nth-last-child(2)": {
+        marginBottom: "1rem",
+      },
+    },
+    commentRow: {
+      padding: "13px 1rem",
+    },
+    commentInputContainer: {
+      width: "100%",
+      height: "100%",
       padding: "0 0 0 1rem",
       borderRadius: "0.5rem",
       background: theme.palette.primary.light,
       boxShadow: "0 8px 18px -10px rgba(0, 0, 0, 0.2)",
+      "&:nth-last-child(2)": {
+        marginBottom: "1rem",
+      },
     },
     commentInput: {
       padding: "0 !important",
     },
-    comments: {
+    commentContent: {
       fontWeight: 400,
       fontSize: "16px",
       color: theme.palette.text.primary,
+    },
+    commentAvatar: {
+      width: "1.5rem",
+      height: "1.5rem",
+      fontSize: "12px",
+      marginRight: "1rem",
+      color: theme.palette.common.white,
+      backgroundColor: theme.palette.primary.main,
     },
     submitComment: {
       color: theme.palette.primary.main,
@@ -281,6 +305,19 @@ export const MeetingCard = ({
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setComment(event.currentTarget.value);
+  };
+
+  const handleSubmitComment = async () => {
+    if (comment && sessionToken) {
+      try {
+        await api.createComment(meeting.id, sessionToken, comment);
+        // handleRefetchComments();
+        handleRefetchMeetings();
+        setComment("");
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (
@@ -481,11 +518,47 @@ export const MeetingCard = ({
 
                 <Divider className={classes.divider} />
 
-                <Box display="flex" justifyContent="center" alignItems="center">
-                  <Box className={classes.commentsContainer}>
-                    {/* <Typography variant="body2" className={classes.comments}>
-                      {"There are no comments available."}
-                    </Typography> */}
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  flexDirection="column"
+                >
+                  {meeting.comments.length > 0 && (
+                    <Box className={classes.commentsContainer}>
+                      {meeting.comments.map((comment) => (
+                        <Box
+                          display="flex"
+                          alignItems="center"
+                          className={classes.commentRow}
+                        >
+                          <Tooltip
+                            arrow
+                            title={
+                              comment.user.firstName +
+                              " " +
+                              comment.user.lastName
+                            }
+                          >
+                            <Avatar
+                              variant="rounded"
+                              aria-label="avatar"
+                              className={classes.commentAvatar}
+                            >
+                              {comment.user.firstName.charAt(0)}
+                            </Avatar>
+                          </Tooltip>
+                          <Typography
+                            variant="body2"
+                            className={classes.commentContent}
+                          >
+                            {comment.content}
+                          </Typography>
+                        </Box>
+                      ))}
+                    </Box>
+                  )}
+                  <Box className={classes.commentInputContainer}>
                     <TextField
                       multiline
                       placeholder="Comment something nice :)"
@@ -504,8 +577,9 @@ export const MeetingCard = ({
                         endAdornment: (
                           <IconButton
                             aria-label="copy"
+                            disabled={!comment}
+                            onClick={handleSubmitComment}
                             className={classes.submitComment}
-                            onClick={handleLeaveMeeting}
                           >
                             <SendIcon />
                           </IconButton>
