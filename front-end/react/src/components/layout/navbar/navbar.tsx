@@ -4,7 +4,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import { Link } from "react-router-dom";
-import { Box, Divider, Menu, MenuItem } from "@material-ui/core";
+import { Box, Divider, Tooltip } from "@material-ui/core";
 import { useAuth } from "../../../hooks/useAuth";
 import * as api from "../../../api";
 import { IUser } from "../../../api";
@@ -12,7 +12,8 @@ import Cookies from "js-cookie";
 import NightsStayIcon from "@material-ui/icons/NightsStay";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import { getDarkModePreference, toggleDarkMode } from "../../../session";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import VpnKeyIcon from "@material-ui/icons/VpnKey";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -60,8 +61,6 @@ export const NavBar = () => {
   const [user, setUser] = useState<IUser | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
 
   useEffect(() => {
     const awaitAuthentication = async () => {
@@ -88,14 +87,6 @@ export const NavBar = () => {
     window.location.reload();
   };
 
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   return (
     <AppBar position="static">
       <Toolbar className={classes.toolbar}>
@@ -110,49 +101,51 @@ export const NavBar = () => {
             alignItems="center"
             color="white"
           >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="dark mode"
-              onClick={handleToggleDarkMode}
-            >
-              {darkMode ? (
-                <WbSunnyIcon className={classes.navIcon} />
-              ) : (
-                <NightsStayIcon className={classes.navIcon} />
-              )}
-            </IconButton>
+            <Tooltip arrow title={"Toggle dark/light mode"}>
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="dark mode"
+                onClick={handleToggleDarkMode}
+              >
+                {darkMode ? (
+                  <WbSunnyIcon className={classes.navIcon} />
+                ) : (
+                  <NightsStayIcon className={classes.navIcon} />
+                )}
+              </IconButton>
+            </Tooltip>
 
             <Divider orientation="vertical" className={classes.divider} />
 
-            <IconButton
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <AccountCircle className={classes.navIcon} />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={open}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleLogout} component={Link} to="/signin">
-                Sign Out
-              </MenuItem>
-            </Menu>
+            {user?.isAdmin && (
+              <>
+                <Tooltip arrow title={"Register an admin"}>
+                  <IconButton
+                    edge="start"
+                    color="inherit"
+                    component={Link}
+                    to="/signup"
+                  >
+                    <VpnKeyIcon className={classes.navIcon} />
+                  </IconButton>
+                </Tooltip>
+
+                <Divider orientation="vertical" className={classes.divider} />
+              </>
+            )}
+
+            <Tooltip arrow title={"Sign out"}>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={handleLogout}
+                component={Link}
+                to="/signin"
+              >
+                <ExitToAppIcon className={classes.navIcon} />
+              </IconButton>
+            </Tooltip>
           </Box>
         ) : (
           <Box display="flex" justifyContent="center" alignItems="center">

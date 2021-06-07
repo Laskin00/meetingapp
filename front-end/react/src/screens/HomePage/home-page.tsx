@@ -14,7 +14,10 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
 import { IMeeting } from "../../api/meetings";
-import { MeetingCard } from "../../components/generic/meeting-card/meeting-card";
+import {
+  cardTilt,
+  MeetingCard,
+} from "../../components/generic/meeting-card/meeting-card";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -23,6 +26,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { Form, Formik } from "formik";
 import { Alert } from "@material-ui/lab";
 import { SlideTransition } from "../SignUp/sign-up";
+import { useParams } from "react-router";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -110,6 +114,36 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: "center",
       justifyContent: "center",
     },
+    cardWrapperShadow: {
+      background: theme.palette.background.paper,
+      padding: "0.5rem 0",
+      marginBottom: "4rem",
+      borderRadius: "2rem",
+      "&:nth-child(odd)": {
+        "& > div": {
+          transform: `rotate(-${cardTilt}deg)`,
+          "& > div": {
+            transform: `rotate(${cardTilt}deg)`,
+          },
+        },
+      },
+      "&:nth-child(even)": {
+        "& > div": {
+          transform: `rotate(${cardTilt}deg)`,
+          "& > div": {
+            transform: `rotate(-${cardTilt}deg)`,
+          },
+        },
+      },
+    },
+    cardWrapper: {
+      background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+      padding: "4rem 6rem",
+      [theme.breakpoints.down("sm")]: {
+        padding: "1rem 1.5rem",
+      },
+      borderRadius: "2rem",
+    },
   })
 );
 
@@ -123,6 +157,11 @@ export const HomePage = () => {
   const [message, setMessage] = useState<string | undefined>(undefined);
   const [meetings, setMeetings] = useState<IMeeting[]>([]);
   const [sessionToken, setSessionToken] = useState<string | null>(null);
+  const { inviteToken } = useParams<{ inviteToken?: string }>();
+
+  useEffect(() => {
+    inviteToken && sessionToken && handleJoinMeeting(inviteToken);
+  }, [inviteToken, sessionToken]);
 
   const fetchMeetings = async (sessionToken: string) => {
     const meetingsResponse = await api.getUserMeetings(sessionToken);
@@ -135,8 +174,9 @@ export const HomePage = () => {
       const { user } = await useAuth();
 
       setSessionToken(user.sessionToken);
-      fetchMeetings(user.sessionToken);
-      setIsLoading(false);
+      fetchMeetings(user.sessionToken).finally(() => {
+        setIsLoading(false);
+      });
     };
 
     awaitAuthentication();
@@ -170,9 +210,12 @@ export const HomePage = () => {
     setMeetingCode(event.target.value);
   };
 
-  const handleJoinMeeting = async () => {
-    if (meetingCode && sessionToken) {
-      const response = await api.joinMeeting(meetingCode, sessionToken);
+  const handleJoinMeeting = async (inviteToken?: string) => {
+    if (sessionToken) {
+      const response = await api.joinMeeting(
+        inviteToken ? inviteToken : meetingCode,
+        sessionToken
+      );
 
       if (response.message) {
         setMessage(response.message);
@@ -357,7 +400,7 @@ export const HomePage = () => {
                                 <Button
                                   type="submit"
                                   variant="contained"
-                                  color="secondary"
+                                  color="primary"
                                   disableElevation
                                   fullWidth
                                   size="large"
@@ -406,7 +449,7 @@ export const HomePage = () => {
                         disableElevation
                         fullWidth
                         size="large"
-                        onClick={handleJoinMeeting}
+                        onClick={() => handleJoinMeeting()}
                       >
                         Join hangout
                       </Button>
@@ -417,16 +460,22 @@ export const HomePage = () => {
             </Fade>
           </Modal>
 
-          {meetings.length > 0 && (
-            <Box>
-              {meetings.map((meeting: IMeeting, index) => (
-                <MeetingCard
-                  key={index}
-                  meeting={meeting}
-                  handleRefetchMeetings={handleRefetchMeetings}
-                  triggerSnackbar={handleTriggerSnackbar}
-                />
-              ))}
+          {meetings.length ? (
+            meetings.map((meeting: IMeeting, index) => (
+              <MeetingCard
+                key={index}
+                meeting={meeting}
+                handleRefetchMeetings={handleRefetchMeetings}
+                triggerSnackbar={handleTriggerSnackbar}
+              />
+            ))
+          ) : (
+            <Box className={classes.cardWrapperShadow}>
+              <Box className={classes.cardWrapper}>
+                <Typography variant="h3" className={classes.heading}>
+                  No hangouts? Join an existing one or create your own!
+                </Typography>
+              </Box>
             </Box>
           )}
 

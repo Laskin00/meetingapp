@@ -7,6 +7,7 @@ export interface IUser {
   lastName: string;
   email: string;
   sessionToken: string;
+  isAdmin: boolean;
 }
 
 export interface IApiResponse {
