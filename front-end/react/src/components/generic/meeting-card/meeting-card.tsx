@@ -15,7 +15,6 @@ import {
   IconButton,
   makeStyles,
   Modal,
-  ownerDocument,
   TextField,
   Theme,
   Tooltip,
@@ -27,6 +26,7 @@ import EventIcon from "@material-ui/icons/Event";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+import LinkIcon from "@material-ui/icons/Link";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import SendIcon from "@material-ui/icons/Send";
 import * as api from "../../../api";
@@ -39,7 +39,7 @@ interface IMeetingCardProps {
   handleRefetchMeetings: () => void;
 }
 
-const cardTilt: number = 3;
+export const cardTilt: number = 3;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -275,9 +275,13 @@ export const MeetingCard = ({
     setOpen(false);
   };
 
-  const handleCopyInvite = () => {
-    navigator.clipboard.writeText(meeting.inviteToken);
-    triggerSnackbar("Copied invite code to clipboard.");
+  const handleCopyInvite = (link?: boolean) => {
+    navigator.clipboard.writeText(
+      link
+        ? `http://localhost:3000/meeting/join/${meeting.inviteToken}`
+        : meeting.inviteToken
+    );
+    triggerSnackbar(`Copied invite ${link ? "link" : "code"} to clipboard.`);
   };
 
   const handleLeaveMeeting = async () => {
@@ -312,7 +316,6 @@ export const MeetingCard = ({
     if (comment && sessionToken) {
       try {
         await api.createComment(meeting.id, sessionToken, comment);
-        // handleRefetchComments();
         handleRefetchMeetings();
         setComment("");
       } catch (error) {
@@ -343,9 +346,18 @@ export const MeetingCard = ({
                       <IconButton
                         aria-label="copy"
                         className={classes.copyIcon}
-                        onClick={handleCopyInvite}
+                        onClick={() => handleCopyInvite(false)}
                       >
                         <FileCopyOutlinedIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip arrow title="Copy invite link">
+                      <IconButton
+                        aria-label="copy-link"
+                        className={classes.copyIcon}
+                        onClick={() => handleCopyInvite(true)}
+                      >
+                        <LinkIcon />
                       </IconButton>
                     </Tooltip>
                     <Tooltip arrow title="Delete hangout">
@@ -527,8 +539,9 @@ export const MeetingCard = ({
                 >
                   {meeting.comments.length > 0 && (
                     <Box className={classes.commentsContainer}>
-                      {meeting.comments.map((comment) => (
+                      {meeting.comments.map((comment, index) => (
                         <Box
+                          key={index}
                           display="flex"
                           alignItems="center"
                           className={classes.commentRow}
