@@ -343,12 +343,12 @@ export const HomePage = () => {
                                 response.meetingUuid
                               );
 
+                            fetchMeetings(sessionToken);
                             setMessage(
                               `Success! Hangout invite code is: ${inviteTokenResponse.inviteToken}`
                             );
+                            setOpen(false);
                             setOpenSnackbar(true);
-
-                            fetchMeetings(sessionToken);
                           } catch (error) {
                             setError('Failed to create hangout.');
                             setOpenSnackbar(true);
@@ -358,7 +358,7 @@ export const HomePage = () => {
                         actions.setSubmitting(false);
                       }}
                     >
-                      {({ handleChange, isSubmitting }) => (
+                      {({ values, handleChange, isSubmitting }) => (
                         <Grid item xs={12} className={classes.gridItem}>
                           <Form noValidate name='createMeeting'>
                             <Grid container spacing={2}>
@@ -450,7 +450,10 @@ export const HomePage = () => {
                                   disableElevation
                                   fullWidth
                                   size='large'
-                                  disabled={isSubmitting}
+                                  disabled={
+                                    isSubmitting ||
+                                    !!(!values.description || !values.location)
+                                  }
                                 >
                                   {isSubmitting
                                     ? 'Creating hangout...'
@@ -496,6 +499,7 @@ export const HomePage = () => {
                         fullWidth
                         size='large'
                         onClick={() => handleJoinMeeting()}
+                        disabled={!meetingCode}
                       >
                         Join hangout
                       </Button>

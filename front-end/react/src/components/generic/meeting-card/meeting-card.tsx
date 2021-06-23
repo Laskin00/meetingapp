@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
       boxShadow: '0 8px 20px -8px rgba(0, 0, 0, 0.5)',
       overflowWrap: 'break-word',
       borderRadius: '1rem',
-      background: theme.palette.primary.dark,
+      background: theme.palette.secondary.dark,
 
       [theme.breakpoints.up('sm')]: {
         width: theme.breakpoints.width('sm'),
@@ -189,7 +189,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       height: '100%',
       borderRadius: '0.5rem',
-      background: theme.palette.primary.light,
+      background: theme.palette.secondary.light,
       boxShadow: '0 8px 18px -10px rgba(0, 0, 0, 0.2)',
       '&:nth-last-child(2)': {
         marginBottom: '1rem',
@@ -203,7 +203,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '100%',
       padding: '0 0 0 1rem',
       borderRadius: '0.5rem',
-      background: theme.palette.primary.light,
+      background: theme.palette.secondary.light,
       boxShadow: '0 8px 18px -10px rgba(0, 0, 0, 0.2)',
       '&:nth-last-child(2)': {
         marginBottom: '1rem',
