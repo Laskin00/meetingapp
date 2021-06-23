@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from 'react';
 import {
   Avatar,
   Backdrop,
@@ -19,19 +19,19 @@ import {
   Theme,
   Tooltip,
   Typography,
-} from "@material-ui/core";
-import { IMeeting } from "../../../api/meetings";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
-import EventIcon from "@material-ui/icons/Event";
-import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
-import LinkIcon from "@material-ui/icons/Link";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import SendIcon from "@material-ui/icons/Send";
-import * as api from "../../../api";
-import { IUser } from "../../../api";
-import { useAuth } from "../../../hooks/useAuth";
+} from '@material-ui/core';
+import { IMeeting } from '../../../api/meetings';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import EventIcon from '@material-ui/icons/Event';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+import LinkIcon from '@material-ui/icons/Link';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import SendIcon from '@material-ui/icons/Send';
+import * as api from '../../../api';
+import { IUser } from '../../../api';
+import { useAuth } from '../../../hooks/useAuth';
 
 interface IMeetingCardProps {
   meeting: IMeeting;
@@ -44,66 +44,66 @@ export const cardTilt: number = 3;
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     card: {
-      boxShadow: "0 8px 20px -8px rgba(0, 0, 0, 0.5)",
-      overflowWrap: "break-word",
-      borderRadius: "1rem",
+      boxShadow: '0 8px 20px -8px rgba(0, 0, 0, 0.5)',
+      overflowWrap: 'break-word',
+      borderRadius: '1rem',
       background: theme.palette.primary.dark,
 
-      [theme.breakpoints.up("sm")]: {
-        width: theme.breakpoints.width("sm"),
+      [theme.breakpoints.up('sm')]: {
+        width: theme.breakpoints.width('sm'),
       },
     },
     cardWrapperShadow: {
       background: theme.palette.background.paper,
-      padding: "0.5rem 0",
-      marginBottom: "4rem",
-      borderRadius: "2rem",
-      "&:nth-child(odd)": {
-        "& > div": {
+      padding: '0.5rem 0',
+      marginBottom: '4rem',
+      borderRadius: '2rem',
+      '&:nth-child(odd)': {
+        '& > div': {
           transform: `rotate(-${cardTilt}deg)`,
-          "& > div": {
+          '& > div': {
             transform: `rotate(${cardTilt}deg)`,
           },
         },
       },
-      "&:nth-child(even)": {
-        "& > div": {
+      '&:nth-child(even)': {
+        '& > div': {
           transform: `rotate(${cardTilt}deg)`,
-          "& > div": {
+          '& > div': {
             transform: `rotate(-${cardTilt}deg)`,
           },
         },
       },
     },
     cardWrapper: {
-      background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-      padding: "4rem 6rem",
-      [theme.breakpoints.down("sm")]: {
-        padding: "1rem 1.5rem",
+      background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+      padding: '4rem 6rem',
+      [theme.breakpoints.down('sm')]: {
+        padding: '1rem 1.5rem',
       },
-      borderRadius: "2rem",
+      borderRadius: '2rem',
     },
     header: {
-      display: "flex",
-      alignItems: "center",
+      display: 'flex',
+      alignItems: 'center',
       background: theme.palette.background.default,
       borderBottom: `1px solid ${theme.palette.divider}`,
     },
     description: {
-      fontSize: "20px",
+      fontSize: '20px',
       color: theme.palette.text.primary,
-      textAlign: "center",
+      textAlign: 'center',
     },
     dataRow: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       marginTop: theme.spacing(1),
     },
     divider: {
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(1),
-      background: "transparent",
+      background: 'transparent',
     },
     icon: {
       color: theme.palette.text.secondary,
@@ -117,8 +117,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     information: {
       fontWeight: 400,
-      fontSize: "16px",
-      textAlign: "center",
+      fontSize: '16px',
+      textAlign: 'center',
       color: theme.palette.text.primary,
     },
     avatar: {
@@ -127,7 +127,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     title: {
       fontWeight: 500,
-      fontSize: "20px",
+      fontSize: '20px',
       color: theme.palette.text.primary,
     },
     subheader: {
@@ -135,93 +135,93 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.primary.main,
     },
     action: {
-      marginTop: "0",
+      marginTop: '0',
     },
     expand: {
-      transform: "rotate(0deg)",
-      transition: theme.transitions.create("transform", {
+      transform: 'rotate(0deg)',
+      transition: theme.transitions.create('transform', {
         duration: theme.transitions.duration.shortest,
       }),
     },
     expandOpen: {
-      transform: "rotate(180deg)",
+      transform: 'rotate(180deg)',
     },
     cardActions: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     userContainer: {
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     usersContainer: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     modal: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     wrapper: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      outline: "none",
-      width: theme.breakpoints.width("sm"),
-      borderRadius: "8px",
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      outline: 'none',
+      width: theme.breakpoints.width('sm'),
+      borderRadius: '8px',
       backgroundColor: theme.palette.background.paper,
       boxShadow: theme.shadows[5],
       padding: theme.spacing(6, 8),
       margin: theme.spacing(4),
     },
     modalTitle: {
-      fontSize: "20px",
+      fontSize: '20px',
       fontWeight: 500,
       color: theme.palette.text.primary,
     },
     commentsContainer: {
-      width: "100%",
-      height: "100%",
-      borderRadius: "0.5rem",
+      width: '100%',
+      height: '100%',
+      borderRadius: '0.5rem',
       background: theme.palette.primary.light,
-      boxShadow: "0 8px 18px -10px rgba(0, 0, 0, 0.2)",
-      "&:nth-last-child(2)": {
-        marginBottom: "1rem",
+      boxShadow: '0 8px 18px -10px rgba(0, 0, 0, 0.2)',
+      '&:nth-last-child(2)': {
+        marginBottom: '1rem',
       },
     },
     commentRow: {
-      padding: "13px 1rem",
+      padding: '13px 1rem',
     },
     commentInputContainer: {
-      width: "100%",
-      height: "100%",
-      padding: "0 0 0 1rem",
-      borderRadius: "0.5rem",
+      width: '100%',
+      height: '100%',
+      padding: '0 0 0 1rem',
+      borderRadius: '0.5rem',
       background: theme.palette.primary.light,
-      boxShadow: "0 8px 18px -10px rgba(0, 0, 0, 0.2)",
-      "&:nth-last-child(2)": {
-        marginBottom: "1rem",
+      boxShadow: '0 8px 18px -10px rgba(0, 0, 0, 0.2)',
+      '&:nth-last-child(2)': {
+        marginBottom: '1rem',
       },
     },
     commentInput: {
-      padding: "0 !important",
+      padding: '0 !important',
     },
     commentContent: {
       fontWeight: 400,
-      fontSize: "16px",
+      fontSize: '16px',
       color: theme.palette.text.primary,
     },
     commentAvatar: {
-      width: "1.5rem",
-      height: "1.5rem",
-      fontSize: "12px",
-      marginRight: "1rem",
+      width: '1.5rem',
+      height: '1.5rem',
+      fontSize: '12px',
+      marginRight: '1rem',
       color: theme.palette.common.white,
       backgroundColor: theme.palette.primary.main,
     },
@@ -244,7 +244,7 @@ export const MeetingCard = ({
   const [meetingOwner, setMeetingOwner] = useState<IUser>();
   const [meetingUsers, setMeetingUsers] = useState<IUser[]>([]);
   const [sessionToken, setSessionToken] = useState<string | null>(null);
-  const [comment, setComment] = useState<string>("");
+  const [comment, setComment] = useState<string>('');
 
   const fetchMeetingUsers = async () => {
     const owner = await api.getMeetingOwner(meeting.id);
@@ -281,13 +281,13 @@ export const MeetingCard = ({
         ? `http://localhost:3000/meeting/join/${meeting.inviteToken}`
         : meeting.inviteToken
     );
-    triggerSnackbar(`Copied invite ${link ? "link" : "code"} to clipboard.`);
+    triggerSnackbar(`Copied invite ${link ? 'link' : 'code'} to clipboard.`);
   };
 
   const handleLeaveMeeting = async () => {
     if (currentUser && sessionToken && meetingOwner) {
       try {
-        if (meetingOwner.id === currentUser.id) {
+        if (meetingOwner.id === currentUser.id || currentUser.isAdmin) {
           await api.deleteMeeting(meeting.id, sessionToken);
         } else {
           await api.leaveMeeting(meeting.id, sessionToken);
@@ -295,7 +295,7 @@ export const MeetingCard = ({
 
         handleClose();
         handleRefetchMeetings();
-        triggerSnackbar("Hangout left.", true);
+        triggerSnackbar('Hangout left.', true);
       } catch (error) {
         console.log(error);
       }
@@ -317,7 +317,7 @@ export const MeetingCard = ({
       try {
         await api.createComment(meeting.id, sessionToken, comment);
         handleRefetchMeetings();
-        setComment("");
+        setComment('');
       } catch (error) {
         console.log(error);
       }
@@ -333,36 +333,36 @@ export const MeetingCard = ({
               <CardHeader
                 avatar={
                   <Avatar
-                    aria-label="recipe"
+                    aria-label='recipe'
                     className={classes.avatar}
-                    variant="rounded"
+                    variant='rounded'
                   >
                     {meetingOwner && meetingOwner.firstName.charAt(0)}
                   </Avatar>
                 }
                 action={
                   <>
-                    <Tooltip arrow title="Copy invite code">
+                    <Tooltip arrow title='Copy invite code'>
                       <IconButton
-                        aria-label="copy"
+                        aria-label='copy'
                         className={classes.copyIcon}
                         onClick={() => handleCopyInvite(false)}
                       >
                         <FileCopyOutlinedIcon />
                       </IconButton>
                     </Tooltip>
-                    <Tooltip arrow title="Copy invite link">
+                    <Tooltip arrow title='Copy invite link'>
                       <IconButton
-                        aria-label="copy-link"
+                        aria-label='copy-link'
                         className={classes.copyIcon}
                         onClick={() => handleCopyInvite(true)}
                       >
                         <LinkIcon />
                       </IconButton>
                     </Tooltip>
-                    <Tooltip arrow title="Delete hangout">
+                    <Tooltip arrow title='Delete hangout'>
                       <IconButton
-                        aria-label="delete"
+                        aria-label='delete'
                         className={classes.deleteIcon}
                         onClick={handleOpen}
                       >
@@ -373,9 +373,9 @@ export const MeetingCard = ({
                 }
                 title={
                   meetingOwner &&
-                  meetingOwner.firstName + " " + meetingOwner.lastName
+                  meetingOwner.firstName + ' ' + meetingOwner.lastName
                 }
-                subheader="Hangout creator"
+                subheader='Hangout creator'
                 className={classes.header}
                 classes={{
                   title: classes.title,
@@ -385,8 +385,8 @@ export const MeetingCard = ({
               />
 
               <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
+                aria-labelledby='transition-modal-title'
+                aria-describedby='transition-modal-description'
                 className={classes.modal}
                 open={open}
                 onClose={handleClose}
@@ -399,27 +399,28 @@ export const MeetingCard = ({
                 <Fade in={open}>
                   <div className={classes.wrapper}>
                     <Typography
-                      variant="h4"
-                      align="center"
+                      variant='h4'
+                      align='center'
                       className={classes.modalTitle}
                     >
                       {`Are you sure you want to ${
                         meetingOwner &&
                         currentUser &&
-                        meetingOwner.id === currentUser.id
-                          ? "delete"
-                          : "leave"
+                        (meetingOwner.id === currentUser.id ||
+                          currentUser?.isAdmin)
+                          ? 'delete'
+                          : 'leave'
                       } this hangout?`}
                     </Typography>
 
-                    <Grid container spacing={4} style={{ marginTop: "1rem" }}>
+                    <Grid container spacing={4} style={{ marginTop: '1rem' }}>
                       <Grid item xs={6}>
                         <Button
-                          variant="contained"
-                          color="default"
+                          variant='contained'
+                          color='default'
                           disableElevation
                           fullWidth
-                          size="large"
+                          size='large'
                           onClick={handleClose}
                         >
                           Cancel
@@ -428,11 +429,11 @@ export const MeetingCard = ({
 
                       <Grid item xs={6}>
                         <Button
-                          variant="contained"
-                          color="primary"
+                          variant='contained'
+                          color='primary'
                           disableElevation
                           fullWidth
-                          size="large"
+                          size='large'
                           onClick={handleLeaveMeeting}
                         >
                           Confirm
@@ -445,8 +446,8 @@ export const MeetingCard = ({
 
               <CardContent>
                 <Typography
-                  component="p"
-                  variant="body1"
+                  component='p'
+                  variant='body1'
                   className={classes.description}
                 >
                   {meeting.description}
@@ -457,30 +458,30 @@ export const MeetingCard = ({
                 <Grid container spacing={2}>
                   <Grid item xs={4} className={classes.dataRow}>
                     <LocationOnIcon className={classes.icon} />
-                    <Typography variant="body2" className={classes.information}>
+                    <Typography variant='body2' className={classes.information}>
                       {meeting.location}
                     </Typography>
                   </Grid>
 
                   <Grid item xs={4} className={classes.dataRow}>
                     <EventIcon className={classes.icon} />
-                    <Typography variant="body2" className={classes.information}>
+                    <Typography variant='body2' className={classes.information}>
                       {meeting.date}
                     </Typography>
                   </Grid>
 
                   <Grid item xs={4} className={classes.dataRow}>
                     <AccessTimeIcon className={classes.icon} />
-                    <Typography variant="body2" className={classes.information}>
-                      {meeting.time}
+                    <Typography variant='body2' className={classes.information}>
+                      {meeting.time.slice(0, -3)}
                     </Typography>
                   </Grid>
                 </Grid>
 
                 <Divider className={classes.divider} />
 
-                <Box display="flex" justifyContent="center" alignItems="center">
-                  <Typography className={classes.information} variant="body1">
+                <Box display='flex' justifyContent='center' alignItems='center'>
+                  <Typography className={classes.information} variant='body1'>
                     View hangout participants
                   </Typography>
                   <IconButton
@@ -489,13 +490,13 @@ export const MeetingCard = ({
                     }`}
                     onClick={handleExpandClick}
                     aria-expanded={expanded}
-                    aria-label="show more"
+                    aria-label='show more'
                   >
                     <ExpandMoreIcon />
                   </IconButton>
                 </Box>
 
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <Collapse in={expanded} timeout='auto' unmountOnExit>
                   <CardContent>
                     <Grid
                       container
@@ -510,16 +511,16 @@ export const MeetingCard = ({
                           className={classes.userContainer}
                         >
                           <Avatar
-                            aria-label="recipe"
-                            variant="rounded"
+                            aria-label='recipe'
+                            variant='rounded'
                             className={classes.avatar}
                           >
                             {user.firstName.charAt(0)}
                           </Avatar>
                           <Typography
-                            style={{ marginTop: "0.5rem" }}
+                            style={{ marginTop: '0.5rem' }}
                             className={classes.information}
-                            variant="body1"
+                            variant='body1'
                           >
                             {user.firstName} {user.lastName}
                           </Typography>
@@ -532,38 +533,38 @@ export const MeetingCard = ({
                 <Divider className={classes.divider} />
 
                 <Box
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  flexDirection="column"
+                  display='flex'
+                  justifyContent='center'
+                  alignItems='center'
+                  flexDirection='column'
                 >
                   {meeting.comments.length > 0 && (
                     <Box className={classes.commentsContainer}>
                       {meeting.comments.map((comment, index) => (
                         <Box
                           key={index}
-                          display="flex"
-                          alignItems="center"
+                          display='flex'
+                          alignItems='center'
                           className={classes.commentRow}
                         >
                           <Tooltip
                             arrow
                             title={
                               comment.user.firstName +
-                              " " +
+                              ' ' +
                               comment.user.lastName
                             }
                           >
                             <Avatar
-                              variant="rounded"
-                              aria-label="avatar"
+                              variant='rounded'
+                              aria-label='avatar'
                               className={classes.commentAvatar}
                             >
                               {comment.user.firstName.charAt(0)}
                             </Avatar>
                           </Tooltip>
                           <Typography
-                            variant="body2"
+                            variant='body2'
                             className={classes.commentContent}
                           >
                             {comment.content}
@@ -575,14 +576,14 @@ export const MeetingCard = ({
                   <Box className={classes.commentInputContainer}>
                     <TextField
                       multiline
-                      placeholder="Comment something nice :)"
-                      size="small"
-                      autoComplete="off"
-                      variant="standard"
+                      placeholder='Comment something nice :)'
+                      size='small'
+                      autoComplete='off'
+                      variant='standard'
                       fullWidth
-                      name="comment"
-                      type="string"
-                      id="comment"
+                      name='comment'
+                      type='string'
+                      id='comment'
                       value={comment}
                       onChange={(event) => handleChangeComment(event)}
                       InputProps={{
@@ -590,7 +591,7 @@ export const MeetingCard = ({
                         className: classes.commentInput,
                         endAdornment: (
                           <IconButton
-                            aria-label="copy"
+                            aria-label='copy'
                             disabled={!comment}
                             onClick={handleSubmitComment}
                             className={classes.submitComment}
