@@ -10,9 +10,10 @@ import {
   Snackbar,
   TextField,
   Theme,
+  Tooltip,
   Typography,
 } from '@material-ui/core';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IMeeting } from '../../api/meetings';
 import {
   cardTilt,
@@ -28,14 +29,15 @@ import { Alert } from '@material-ui/lab';
 import { SlideTransition } from '../SignUp/sign-up';
 import { useParams } from 'react-router';
 import {
-  KeyboardDatePicker,
+  DatePicker,
   MuiPickersUtilsProvider,
   TimePicker,
 } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import moment from 'moment';
-import { startOfDay } from 'date-fns';
+import EventIcon from '@material-ui/icons/Event';
+import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -268,13 +270,15 @@ export const HomePage = () => {
             Your hangouts
           </Typography>
 
-          <IconButton
-            aria-label='settings'
-            onClick={handleOpen}
-            className={classes.iconBtn}
-          >
-            <AddCircleIcon fontSize='inherit' />
-          </IconButton>
+          <Tooltip arrow placement='right' title='Create or join a hangout'>
+            <IconButton
+              aria-label='settings'
+              onClick={handleOpen}
+              className={classes.iconBtn}
+            >
+              <AddCircleIcon fontSize='inherit' />
+            </IconButton>
+          </Tooltip>
 
           <Modal
             aria-labelledby='transition-modal-title'
@@ -391,7 +395,7 @@ export const HomePage = () => {
                                 sm={12}
                                 className={classes.gridItem}
                               >
-                                <KeyboardDatePicker
+                                <DatePicker
                                   fullWidth
                                   inputVariant='outlined'
                                   name='date'
@@ -402,8 +406,12 @@ export const HomePage = () => {
                                   format='YYYY-MM-DD'
                                   onChange={setSelectedDate}
                                   minDate={moment()}
-                                  KeyboardButtonProps={{
-                                    'aria-label': 'change date',
+                                  InputProps={{
+                                    endAdornment: (
+                                      <IconButton aria-label='time'>
+                                        <EventIcon />
+                                      </IconButton>
+                                    ),
                                   }}
                                 />
                               </Grid>
@@ -424,6 +432,13 @@ export const HomePage = () => {
                                   value={selectedTime}
                                   onChange={setSelectedTime}
                                   minutesStep={5}
+                                  InputProps={{
+                                    endAdornment: (
+                                      <IconButton aria-label='time'>
+                                        <QueryBuilderIcon />
+                                      </IconButton>
+                                    ),
+                                  }}
                                 />
                               </Grid>
 
